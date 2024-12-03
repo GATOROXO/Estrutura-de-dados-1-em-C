@@ -6,10 +6,11 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(){
-    int a , b ,c ;
-    
+    int a, b, c;
+
     printf("Digite o primeiro valor: ");
     scanf("%d", &a);
     printf("Digite o segundo valor: ");
@@ -17,14 +18,16 @@ int main(){
     printf("Digite o terceiro valor: ");
     scanf("%d", &c);
 
-    if (a > b && a > c){
-        printf("O maior valor eh %d", a);
-    }
-    if (b > a && b > c){
-        printf("O maior valor eh %d", b);
-    }
+    if (a > b && a > c) {
+        printf("O maior valor eh %d\n", a);
+    } 
+    else if (b > a && b > c) {
+        printf("O maior valor eh %d\n", b);
+    } 
     else {
-        printf("O maior valor eh %d", c);
+        printf("O maior valor eh %d\n", c);
     }
+
+    system("pause");
     return 0;
 }
