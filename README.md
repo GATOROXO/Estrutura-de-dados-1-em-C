@@ -1,4 +1,4 @@
-# Estrutura-de-dados-1-em-C-
+# Estrutura-de-dados-1-em-C
 CONFIGURANDO O AMBIENTE PARA PROGRAMAÇÃO EM C NO WINDOWS
 ========================================================
 
