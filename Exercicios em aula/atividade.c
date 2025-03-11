@@ -13,6 +13,6 @@ int main() {
     printf("Digite o valor de Y : \n");
     scanf("%d", &y);
     total = x + y;
-    printf("X=%d + Y=%d o toth: %d\n", x , y , total);
+    printf("X=%d + Y=%d o total eh: %d\n", x , y , total);
     return 0;
 } 
