@@ -1,0 +1,19 @@
+============================
+Lista 
+-> Estrutura com maior dinamica de aplicaçao
+->Pare-se valor em qualquer posiçao(valida)
+    ->Não pode ocorrer lacuna
+->Pode-se 
+    ->Inserir no inicio
+    ->Inserir no fim
+    ->Inserir em posiçao especifica
+    ->Remover do inicio
+    ->Remover do fim
+    ->Remover de posiçao especifica
+    ->Remover valor especifico
+    ->Ordenar
+    ->etc...
+=============================
+Lista Estática
+(abstraçao feita no quadro)
+vetor com n indices

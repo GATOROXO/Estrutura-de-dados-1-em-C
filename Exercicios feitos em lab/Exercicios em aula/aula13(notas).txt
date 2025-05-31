@@ -1,0 +1,23 @@
+alocação estatica :
+    (+)é rapido
+    (+)simples de imoplementar
+    (+)Geralmente usa pouca memoria 
+    (-)limitado a casos especificos
+    (-)inflexivel
+alocação dinamica: 
+    (+)muito flexivel
+    (+)uso Geral
+    (+)uso otimizado de memoria
+    (-)lento
+    (-)gasto elevado de memoria
+    (-)implementaçao mais elaborada
+________________________________
+
+Fila(first in , first out)
+    1º a entrar é o 1º a sair
+    entrada apenas em um lado 
+    saída apenas de um lado
+Pilha(first in, last out)
+    1º a entrar, é o ultimo a sair
+    
+

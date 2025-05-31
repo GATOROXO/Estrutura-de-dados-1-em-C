@@ -1,0 +1,92 @@
+# Anotações para Execução do Trabalho 7
+
+## Etapas para realização do trabalho
+
+### 1. Geração dos Dados de Entrada
+
+#### Objetivo:
+Criar arquivos contendo números aleatórios únicos, que serão usados como entrada para os métodos de ordenação.
+
+#### Passos:
+1. Criar um programa em C que gere números pseudoaleatórios entre **1 e 999.999**.
+2. Garantir que os números gerados sejam **únicos** (usar um vetor auxiliar ou uma estrutura de marcação para verificar repetição).
+3. Criar **15 arquivos** de texto no formato:
+   - 5 arquivos com **1.000** números.
+   - 5 arquivos com **10.000** números.
+   - 5 arquivos com **100.000** números.
+4. Salvar os arquivos no seguinte formato: `1000-arq1.txt`, `1000-arq2.txt`, ..., `100000-arq5.txt`.
+5. Cada número deve ser salvo em uma **linha separada** no arquivo.
+
+#### Sugestão de Implementação em C:
+- Usar `rand()` ou `srand(time(NULL))` para gerar números aleatórios.
+- Utilizar um **array booleano** para marcar números já gerados e evitar repetições.
+- Utilizar `fprintf()` para escrever os números nos arquivos de saída.
+
+---
+
+### 2. Implementação dos Métodos de Ordenação
+
+#### Objetivo:
+Implementar e testar os seguintes algoritmos de ordenação:
+1. **Insertion Sort**
+2. **Bubble Sort**
+3. **Shell Sort**
+4. **Merge Sort**
+5. **Quick Sort**
+
+#### Passos:
+1. Criar uma **função para cada algoritmo** de ordenação.
+2. Implementar cada algoritmo de forma eficiente, utilizando **arrays estáticos**.
+3. Criar uma função para **carregar os arquivos gerados na Etapa 1** em um array.
+4. Implementar um mecanismo para **contabilizar**:
+   - O **número de trocas** realizadas.
+   - O **tempo de execução** do algoritmo (`clock()` pode ser utilizado).
+5. Após a ordenação, salvar os resultados em uma estrutura de dados para análise posterior.
+
+#### Dicas de Implementação:
+- Utilize `clock_t start, end;` e `double cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;` para medir o tempo de execução.
+- Use um contador global ou um parâmetro extra para registrar o **número de trocas**.
+- Para cada método, execute o algoritmo para **cada arquivo de entrada** e armazene os resultados.
+
+---
+
+### 3. Análise dos Resultados
+
+#### Objetivo:
+Comparar os algoritmos em relação ao **tempo de execução** e ao **número de trocas**, organizando os resultados em tabelas.
+
+#### Passos:
+1. Criar uma **tabela para cada método de ordenação** contendo:
+   - Nome do arquivo de entrada.
+   - Número de trocas realizadas.
+   - Tempo de execução em segundos.
+2. Calcular a **média dos resultados** para cada conjunto de entradas.
+3. Comparar os algoritmos e escrever um **relatório** contendo:
+   - O **melhor** e o **pior** desempenho.
+   - A influência do **tamanho da entrada** no tempo e nas trocas.
+   - Explicações sobre **por que cada método teve determinado desempenho**.
+
+#### Sugestão de Tabela:
+| Método: Bubble Sort | Num. Trocas | Tempo (s) |
+|---------------------|------------|----------|
+| 1000-arq1.txt      | nnn        | sss      |
+| 1000-arq2.txt      | nnn        | sss      |
+| ...                | ...        | ...      |
+| **Média**          | **NNN**    | **SSS**  |
+
+#### Dicas:
+- Usar `fprintf()` para registrar os resultados em um arquivo `resultados.txt`.
+- Criar gráficos comparativos se possível.
+- Discutir **casos melhores e piores** para cada algoritmo (exemplo: Quick Sort pode ser ruim para dados quase ordenados).
+
+---
+
+## Conclusão
+
+1. **Planeje antes de codificar**: desenhe um fluxo de execução do trabalho.
+2. **Teste cada parte separadamente**: primeiro a geração dos arquivos, depois a ordenação.
+3. **Valide os resultados**: verifique se os números realmente estão ordenados após a execução.
+4. **Documente seu código**: comente cada função para facilitar a leitura.
+5. **Revise antes de entregar**: confira se todos os requisitos foram atendidos.
+
+

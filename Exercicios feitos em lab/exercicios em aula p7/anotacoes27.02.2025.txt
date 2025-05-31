@@ -1,0 +1,24 @@
+Tarefa da hora
+implementar funçoes para lista com encadeamento duplo:
+
+inserçao
+    inicio
+    fim
+    posiçao
+Remoçao
+    inicio
+    fim
+    por posiçao
+    por valor
+Busca (por elemento)
+Imprimir
+
+Tarefa da 2ª hora:
+implementar p/ lista circular com encadeamento simples
+    inserçao no inicio
+    inserçao no fim
+    Remoçao no inicio
+    Remoçao no fim 
+    Giro (implementar n passos com o ponteiro de lista)
+
+faça o mesmo ponteiro p/uma lista circular com encadeamento duplo.

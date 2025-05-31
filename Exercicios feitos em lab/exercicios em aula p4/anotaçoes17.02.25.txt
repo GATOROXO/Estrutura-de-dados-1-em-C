@@ -1,0 +1,11 @@
+=========PILHA(Dinamica)==============
+->empilha/desempilha pela ponta(inicio)
+->empilha
+    ->Verifica se a pilha esta vazia
+    ->se sim, aloca novo nó e atualiza pilha.
+    ->senão, aloca novo nó, atualiza o proximo dele para apontar para ele
+->desempilha
+    ->Verifica se a pilha tem valor 
+        ->Se sim, guarda valor do top, usa um ponteiro aux 
+        para apontar para o topo, atualiza pilha para o segundo nó, libera da memoria 
+        o nó auxiliar e retorna o valor.

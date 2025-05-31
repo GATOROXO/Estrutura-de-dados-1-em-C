@@ -1,0 +1,311 @@
+Arvore binaria 
+Pseudo codigo de inserçao
+
+insere (tipo no *nó, char letra, int valor){
+    se(nó == NULO ) {
+        nó = alocar_memoria()
+        nó->valor = valor
+        nó->letra = letra
+        nó->esquerda = NULO
+        nó->direita = NULO
+        retorna nó
+    }
+    
+    se(letra < nó->letra) {
+        nó->esquerda = insere(nó->esquerda, letra, valor)
+    } senão se(letra > nó->letra) {
+        nó->direita = insere(nó->direita, letra, valor)
+    } senão {
+        // letra já existe na árvore
+        // pode-se ignorar a inserção ou implementar uma política para duplicatas
+        // por exemplo, atualizar o valor:
+        // nó->valor = valor
+    }
+    
+    retorna nó
+}
+
+Percurso :
+        pré-ordem(nó) {
+        se(nó != NULO) {
+            visita(nó)               // processa o nó atual primeiro
+            pré-ordem(nó->esquerda)  // percorre subárvore esquerda
+            pré-ordem(nó->direita)   // percorre subárvore direita
+        }
+    }
+
+    ordem(nó) {
+        se(nó != NULO) {
+            ordem(nó->esquerda)      // percorre subárvore esquerda primeiro
+            visita(nó)               // processa o nó atual
+            ordem(nó->direita)       // percorre subárvore direita
+        }
+    }
+
+    pós-ordem(nó) {
+        se(nó != NULO) {
+            pós-ordem(nó->esquerda)  // percorre subárvore esquerda primeiro
+            pós-ordem(nó->direita)   // percorre subárvore direita
+            visita(nó)               // processa o nó atual por último
+        }
+    }
+
+Atividade: 
+    implementar funçoes que: 
+
+        - Contabiliza o total de nos da arvore:
+            ContaNos(nó) {
+                se (nó == NULO) retorna 0
+                retorna 1 + ContaNos(nó->esquerda) + ContaNos(nó->direita)
+            }
+
+        - Contabiliza o total de nós folha:
+            ContaFolha(nó) {
+                se (nó == NULO) retorna 0
+                se (nó->esquerda == NULO e nó->direita == NULO) retorna 1
+                retorna ContaFolha(nó->esquerda) + ContaFolha(nó->direita)
+            }
+
+        - Busca por nó a partir da chave:
+            BuscaNoporChave(nó, chave) {
+                se (nó == NULO) retorna NULO
+                se (nó->chave == chave) retorna nó
+                se (chave < nó->chave) retorna BuscaNoporChave(nó->esquerda, chave)
+                retorna BuscaNoporChave(nó->direita, chave)
+            }
+
+        - Verifica se um nó (chave) é folha:
+            VerificaFolha(nó, chave) {
+                nó_encontrado = BuscaNoporChave(nó, chave)
+                se (nó_encontrado == NULO) retorna FALSO
+                retorna (nó_encontrado->esquerda == NULO e nó_encontrado->direita == NULO)
+            }
+
+        - Calcula a altura da arvore:
+            calculaAltura(nó) {
+                se (nó == NULO) retorna -1
+                altura_esquerda = calculaAltura(nó->esquerda)
+                altura_direita = calculaAltura(nó->direita)
+                retorna 1 + máximo(altura_esquerda, altura_direita)
+            }
+
+        - Contabiliza a quantidade de nós por nível passado por parâmetro:
+            calculaNoporParametro(nó, nivel) {
+                se (nó == NULO) retorna 0
+                se (nivel == 0) retorna 1
+                retorna calculaNoporParametro(nó->esquerda, nivel - 1) + calculaNoporParametro(nó->direita, nivel - 1)
+            }
+
+        - Imprime a árvore por nível:
+            imprimeporNivel(nó) {
+                altura = calculaAltura(nó)
+                para (i de 0 até altura) {
+                    imprimeNivel(nó, i)
+                    nova_linha()
+                }
+            }
+            imprimeNivel(nó, nivel) {
+                se (nó == NULO) retorna
+                se (nivel == 0) imprime nó->chave
+                senão {
+                    imprimeNivel(nó->esquerda, nivel - 1)
+                    imprimeNivel(nó->direita, nivel - 1)
+                }
+            }
+
+        - Imprime a "rota" da raiz até o nó especificado (pela chave):
+            imprimeRota(nó, chave) {
+                se (nó == NULO) retorna FALSO
+                imprime nó->chave
+                se (nó->chave == chave) retorna VERDADEIRO
+                se (imprimeRota(nó->esquerda, chave) ou imprimeRota(nó->direita, chave)) retorna VERDADEIRO
+                apaga_impressao_atual() // Remove o último nó impresso se a rota não for encontrada
+                retorna FALSO
+            }
+
+        - Remove uma folha(especificado pela chave):
+            remove_no(tipo_no * no, chave){
+                se (no == NULO) retorna NULO
+                
+                // Busca o nó a ser removido
+                se (chave < no->chave)
+                    no->esquerda = remove_no(no->esquerda, chave)
+                senão se (chave > no->chave)
+                    no->direita = remove_no(no->direita, chave)
+                senão { // Encontrou o nó a ser removido
+                    // Caso 1: Nó é uma folha
+                    se (no->esquerda == NULO E no->direita == NULO) {
+                        libera_memoria(no)
+                        retorna NULO
+                    }
+                    
+                    // Caso 2: Nó tem apenas um filho
+                    senão se (no->esquerda == NULO) {
+                        tipo_no* temp = no->direita
+                        libera_memoria(no)
+                        retorna temp
+                    }
+                    senão se (no->direita == NULO) {
+                        tipo_no* temp = no->esquerda
+                        libera_memoria(no)
+                        retorna temp
+                    }
+                    
+                    // Caso 3: Nó tem dois filhos
+                    senão {
+                        // Encontra o sucessor (menor valor na subárvore direita)
+                        tipo_no* temp = encontra_menor(no->direita)
+                        
+                        // Copia os dados do sucessor para o nó atual
+                        no->chave = temp->chave
+                        no->letra = temp->letra
+                        
+                        // Remove o sucessor
+                        no->direita = remove_no(no->direita, temp->chave)
+                    }
+                }
+                retorna no
+            }
+            
+            encontra_menor(tipo_no* no) {
+                tipo_no* atual = no
+                
+                // Vai para o nó mais à esquerda
+                enquanto (atual->esquerda != NULO)
+                    atual = atual->esquerda
+                    
+                retorna atual
+            }
+
+// Perguntas importantes ao implementar cada função:
+
+1. Contabiliza o total de nós da árvore:
+   - Perguntas: 
+     * O que acontece se a árvore estiver vazia?
+     * Como contar recursivamente todos os nós da árvore?
+   - Lógica:
+     * Verificar se o nó é nulo (caso base)
+     * Somar 1 (nó atual) + total de nós na subárvore esquerda + total de nós na subárvore direita
+
+2. Contabiliza o total de nós folha:
+   - Perguntas:
+     * Como identificar se um nó é folha?
+     * Como percorrer a árvore para contar apenas as folhas?
+   - Lógica:
+     * Verificar se o nó é nulo (caso base)
+     * Se for folha (sem filhos), retornar 1
+     * Senão, somar folhas da subárvore esquerda + folhas da subárvore direita
+
+3. Busca por nó a partir da chave:
+   - Perguntas:
+     * Como aproveitar a ordenação da árvore para otimizar a busca?
+     * O que retornar se a chave não existir?
+   - Lógica:
+     * Se o nó for nulo, retornar nulo
+     * Se a chave for igual à chave do nó atual, retornar o nó
+     * Se menor, buscar na subárvore esquerda
+     * Se maior, buscar na subárvore direita
+
+4. Verifica se um nó (chave) é folha:
+   - Perguntas:
+     * Como localizar o nó com a chave especificada?
+     * Como verificar se esse nó é uma folha?
+   - Lógica:
+     * Encontrar o nó usando a função de busca
+     * Verificar se ambos os filhos são nulos
+
+5. Calcula a altura da árvore:
+   - Perguntas:
+     * Qual a altura de uma árvore vazia?
+     * Como calcular a altura máxima entre subárvores?
+   - Lógica:
+     * Se o nó for nulo, retornar -1
+     * Calcular altura da subárvore esquerda e direita
+     * Retornar 1 + máximo entre as duas alturas
+
+6. Contabiliza nós por nível:
+   - Perguntas:
+     * Como contar apenas os nós de um nível específico?
+     * Como descer na árvore até alcançar o nível desejado?
+   - Lógica:
+     * Se o nó for nulo, retornar 0
+     * Se o nível for 0, retornar 1 (encontrou um nó no nível desejado)
+     * Descer um nível na árvore e somar os resultados das subárvores
+
+7. Imprime a árvore por nível:
+   - Perguntas:
+     * Como determinar a altura total da árvore?
+     * Como imprimir cada nível separadamente?
+   - Lógica:
+     * Calcular altura total da árvore
+     * Para cada nível (de 0 até a altura), chamar a função de impressão de nível
+
+8. Imprime a rota da raiz até o nó:
+   - Perguntas:
+     * Como armazenar o caminho durante a busca?
+     * Como lidar com caminhos incorretos?
+   - Lógica:
+     * Imprimir o nó atual
+     * Se encontrou o nó desejado, retornar verdadeiro
+     * Tentar encontrar o nó nas subárvores
+     * Se não encontrar, "desfazer" a impressão do nó atual
+
+9. Remove um nó pela chave:
+   - Perguntas:
+     * Quais são os diferentes casos de remoção (folha, nó com um filho, nó com dois filhos)?
+     * Como manter a estrutura da árvore após a remoção?
+     * Como encontrar o sucessor em caso de nó com dois filhos?
+   - Lógica:
+     * Localizar o nó a ser removido
+     * Para cada caso:
+       * Folha: simplesmente liberar a memória
+       * Um filho: substituir pelo filho
+       * Dois filhos: encontrar sucessor, copiar dados e remover sucessor
+
+Exemplo de implementação da função altura_arvore:
+
+```c
+int altura_arvore(tipo_no* no) {
+    if (no == NULL) {
+        return -1;  // Altura de árvore vazia é -1
+    }
+    
+    int altura_esq = altura_arvore(no->esq);
+    int altura_dir = altura_arvore(no->dir);
+    
+    // Retorna a maior altura + 1 (para contar o nível atual)
+    return (altura_esq > altura_dir) ? altura_esq + 1 : altura_dir + 1;
+}
+```
+
+Exemplo de implementação da função imprime_rota:
+
+```c
+int imprime_rota_aux(tipo_no* no, int chave) {
+    if (no == NULL) {
+        return 0;  // Nó não encontrado
+    }
+    
+    printf("[ %c | %d ] ", no->letra, no->chave);
+    
+    if (no->chave == chave) {
+        return 1;  // Encontrou o nó
+    }
+    
+    if ((chave < no->chave && imprime_rota_aux(no->esq, chave)) || 
+        (chave > no->chave && imprime_rota_aux(no->dir, chave))) {
+        return 1;  // Encontrou o nó em uma das subárvores
+    }
+    
+    printf("\b\b\b\b\b\b\b\b\b\b\b\b");  // Apaga a impressão (backspace)
+    return 0;  // Não encontrou o nó
+}
+
+void imprime_rota(tipo_no* no, int chave) {
+    if (!imprime_rota_aux(no, chave)) {
+        printf("Chave %d não encontrada na árvore\n", chave);
+    } else {
+        printf("\n");
+    }
+}
+```

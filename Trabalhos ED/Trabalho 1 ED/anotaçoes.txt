@@ -1,0 +1,89 @@
+Trabalho 1 de estrutura de dados:
+Aluno: João Paulo Alves Campos
+data de entrega 06/03/2025
+Professor : Ivairton Monteiro Santos
+UFMT - 2024/2
+
+Descriçao do documento de Trabalho:
+Sistema de Gerenciamento de pedidos de um restaurante
+    Desenvolva um sistema de gerenciamento de pedidos para um restaurante, utilizando
+    estruturas de dados como listas, pilhas e filas. O objetivo é simular o fluxo de pedidos em
+    um restaurante, desde o momento em que o cliente faz o pedido até o momento em que
+    o pedido é entregue. O sistema deve ser implementado em linguagem C, com alocação
+    dinâmica de memória.
+    Requisitos:
+        • Implementar uma lista encadeada para armazenar os pedidos.
+        • Utilizar uma fila para gerenciar a ordem de preparo dos pedidos.
+        • Usar uma pilha para gerenciar a entrega dos pedidos prontos.
+    Desenvolvimento:
+    1. Lista encadeada para armazenamento de pedidos
+    A lista encadeada será utilizada para armazenar todos os pedidos feitos pelos clientes.
+    Cada nó da lista representará um pedido e conterá informações como o número do
+    pedido, o nome do cliente, os itens pedidos e a situação do pedido (pendente, em
+    preparo, pronto, entregue).
+    A estrutura do pedido deve ser:
+        struct est_pedido {
+        int numero;
+        char cliente[50];
+        char itens[100];
+        char status[20];
+        struct est_pedido* prox;
+        };
+    2. Fila para Gerenciamento de Preparo
+    A fila será utilizada para gerenciar a ordem de preparo dos pedidos. Os pedidos serão
+    adicionados à fila conforme são feitos e serão removidos da fila conforme são preparados.
+    A estrutura da fila deve fazer referência diretamente ao pedido já cadastrado:
+        struct est_fila {
+        struct est_pedido *pedido;
+        struct est_fila *prox;
+        };
+    3. Pilha para gerenciamento de entrega:
+    A pilha será utilizada para gerenciar a entrega dos pedidos prontos. Os pedidos serão
+    empilhados conforme são preparados e serão desempilhados conforme são entregues aos
+    clientes. Novamente, a estrutura da pilha deve fazer referência direta ao registro do
+    pedido.
+        struct est_pilha {
+        struct est_pedido *pedido;
+        struct est_pilha *prox;
+        };
+    4. Funcionamento do Sistema:
+    1. Recebimento do pedido: O pedido é adicionado à lista encadeada, com status de
+    pendente.
+    2. Início do preparo do pedido: O pedido é adicionado à fila de preparo, seu status é
+    modificado para “em preparo”.
+    3. Fim do prepare do pedido: O status do pedido é alterado para “pronto” e
+    adicionado à pilha de pedidos prontos.
+    4. Entrega do Pedido: O pedido é retirado da pilha de pedidos prontos e entregue ao
+    cliente, alterando seu status para “entregue”.
+
+Resumo: 
+    1-> Devo implementar uma lista dinamica para armazenar pedidos de clientes
+    2-> depois devo implementar uma fila para cuidar da ordem dos pedidos
+    3-> E usar uma pilha pra fazer a entrega dos pedidos prontos
+
+    ->A estrutura de lista de pedidos deve ser a seguinte: 
+        struct est_pedido {
+            int numero;
+            char cliente[50];
+            char itens[100];
+            char status[20];
+            struct est_pedido* prox;
+            };
+
+    -> A estrutura da fila deve ser :
+        struct est_fila {
+            struct est_pedido *pedido;
+            struct est_fila *prox;
+            };
+    
+    -> A estrutura da pilha deve ser: 
+        struct est_pilha {
+            struct est_pedido *pedido;
+            struct est_pilha *prox;
+            };
+
+
+
+
+
+

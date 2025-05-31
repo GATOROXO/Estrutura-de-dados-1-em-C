@@ -1,0 +1,174 @@
+# ÁRVORE COM MÚLTIPLOS FILHOS
+
+## DEFINIÇÃO
+- Estrutura de dados hierárquica onde cada nó pode ter zero ou mais filhos (não limitado a 2 como em árvores binárias)
+- Também conhecida como árvore n-ária ou árvore de aridade variável
+- Na nossa implementação: cada nó pode ter até T elementos e T filhos
+- Útil para representar hierarquias como:
+  * Sistemas de arquivos (pastas/subpastas)
+  * Organogramas empresariais
+  * Menus e submenus
+  * Sistemas de classificação
+
+## ESTRUTURA DO NÓ
+```
+struct arvore_com_multiplos_filhos {
+    int chave[T];                        // Array de chaves (valores)
+    char dado[T];                        // Array de dados associados às chaves
+    arvore_com_multiplos_filhos* filhos[T]; // Ponteiros para os filhos
+    int contador;                        // Número atual de chaves no nó
+};
+```
+
+## LÓGICA DE INSERÇÃO
+1. Se a árvore estiver vazia, criar novo nó e inserir o primeiro elemento
+2. Se o nó atual tem espaço:
+   - Inserir ordenadamente no array de chaves
+   - Ajustar o array de dados correspondente
+   - Incrementar o contador
+3. Se o nó está cheio:
+   - Encontrar filho apropriado baseado na chave
+   - Chamar inserção recursivamente nesse filho
+
+## PSEUDOCÓDIGO DETALHADO
+
+### Alocar Novo Nó
+```
+função aloca_no(chave, dado):
+    novo = alocar memória para estrutura arv_multi
+    se falha na alocação:
+        retorna NULL
+    
+    novo->chave[0] = chave
+    novo->dado[0] = dado
+    novo->contador = 1
+    
+    para i de 0 até T-1:
+        novo->filhos[i] = NULL
+    
+    retorna novo
+```
+
+### Inserção
+```
+função insere_inicio(raiz, chave, dado):
+    // Caso 1: Árvore vazia
+    se raiz == NULL:
+        retorna aloca_no(chave, dado)
+    
+    // Caso 2: Nó tem espaço disponível
+    se raiz->contador < T:
+        i = raiz->contador
+        
+        // Encontrar posição correta (ordenada) movendo elementos maiores
+        enquanto i > 0 E chave < raiz->chave[i-1]:
+            raiz->chave[i] = raiz->chave[i-1]
+            raiz->dado[i] = raiz->dado[i-1]
+            i--
+            
+        // Inserir na posição correta
+        raiz->chave[i] = chave
+        raiz->dado[i] = dado
+        raiz->contador++
+    
+    // Caso 3: Nó cheio, inserir no filho apropriado
+    senão:
+        // Encontrar filho apropriado
+        i = 0
+        enquanto i < raiz->contador E chave > raiz->chave[i]:
+            i++
+        
+        // Inserir recursivamente no filho (criando-o se necessário)
+        raiz->filhos[i] = insere_inicio(raiz->filhos[i], chave, dado)
+    
+    retorna raiz
+```
+
+### Percurso Pré-Ordem
+```
+função pre_ordem(raiz):
+    se raiz == NULL:
+        retorna
+    
+    para i de 0 até raiz->contador-1:
+        imprime raiz->chave[i], raiz->dado[i]
+    
+    para i de 0 até raiz->contador-1:
+        pre_ordem(raiz->filhos[i])
+```
+
+### Percurso Em-Ordem
+```
+função em_ordem(raiz):
+    se raiz == NULL:
+        retorna
+    
+    para i de 0 até raiz->contador-1:
+        se i > 0:
+            em_ordem(raiz->filhos[i-1])
+        
+        imprime raiz->chave[i], raiz->dado[i]
+    
+    // Último filho
+    em_ordem(raiz->filhos[raiz->contador-1])
+```
+
+### Percurso Pós-Ordem
+```
+função pos_ordem(raiz):
+    se raiz == NULL:
+        retorna
+    
+    para i de 0 até raiz->contador-1:
+        pos_ordem(raiz->filhos[i])
+    
+    para i de 0 até raiz->contador-1:
+        imprime raiz->chave[i], raiz->dado[i]
+```
+
+## PERGUNTAS IMPORTANTES ANTES DE IMPLEMENTAR
+
+1. Estrutura:
+   - Como a estrutura atual suporta T chaves e T filhos (não T+1 como em árvores B tradicionais)?
+   - Como lidar com valores duplicados na inserção?
+   - O que acontece quando todos os nós em um caminho estão cheios?
+
+2. Inserção:
+   - Como a implementação atual lida com o overflow quando um nó e seus filhos estão cheios?
+   - É necessário implementar divisão de nós (split) para manter a árvore balanceada?
+
+3. Busca:
+   - Como implementar uma busca eficiente nesta estrutura?
+   - Como aproveitar a ordenação das chaves para otimizar a busca?
+
+4. Remoção:
+   - Como implementar a remoção preservando a estrutura da árvore?
+   - Como reorganizar os nós após remover elementos?
+
+## IMPLEMENTAÇÃO ATUAL
+
+Na implementação atual:
+- Cada nó armazena até T chaves e tem até T filhos
+- As chaves são mantidas ordenadas dentro de cada nó
+- A inserção é recursiva, descendo para o filho apropriado quando um nó está cheio
+- A criação de nós é feita diretamente com dados iniciais (não são criados nós vazios)
+- Não há mecanismo de split/divisão de nós implementado
+
+
+//tarefas 
+
+implementação de hoje 
+    impressao
+        pre ordem 
+        ordem 
+        pos ordem 
+    total de nos 
+    total de folhas  
+    busca por valor 
+    verifica se o no eh folha 
+    altura da arvore
+    imprime arvore por nivel 
+    contabiliza nos por nivel
+    imprime rota ate o valor 
+    busca menor valor
+    busca maior valor 

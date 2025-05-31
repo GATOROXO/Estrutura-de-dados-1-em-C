@@ -1,0 +1,15 @@
+========Lista encadeada==========
+->Inserção
+    ->Inicio
+    ->por posiçao
+    ->fim
+->Remoção
+    ->Inicio
+    ->fim
+    ->por posiçao
+    ->por valor
+->Busca
+    ->por valor
+    ->por posiçao
+->contagem de elementos
+=================================

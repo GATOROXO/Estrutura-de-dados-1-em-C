@@ -1,0 +1,6 @@
+=========lista com encadeamento duplo==========
+    ->usa os mesmos principios da lista com encadeamento simples
+    ->Busca Facilitar algumas operaçoes, evitando a necessidade de ponteiros auxiliares adicionais.
+    ->No entanto demanda mais memoria
+    ->é preciso ter mais atenção em razao de mais um ponteiro de estrutura que precisa ser atualizado.
+===============================================

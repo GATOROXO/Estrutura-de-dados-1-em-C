@@ -1,0 +1,256 @@
+# ÁRVORE COM MÚLTIPLOS FILHOS
+
+## DEFINIÇÃO
+- Estrutura de dados hierárquica onde cada nó pode ter zero ou mais filhos (não limitado a 2 como em árvores binárias)
+- Também conhecida como árvore n-ária ou árvore de aridade variável
+- Na nossa implementação: cada nó pode ter até T elementos e T+1 filhos
+- Similar a uma árvore B, mas com regras de balanceamento mais simples
+- Útil para representar hierarquias como:
+  * Sistemas de arquivos (pastas/subpastas)
+  * Organogramas empresariais
+  * Menus e submenus
+  * Sistemas de classificação
+
+## ESTRUTURA DO NÓ
+```
+struct arvore_com_multiplos_filhos {
+    int chave[T];                        // Array de chaves (valores)
+    char dado[T];                        // Array de dados associados às chaves
+    arvore_com_multiplos_filhos* filhos[T+1]; // Ponteiros para os filhos
+    int contador;                        // Número atual de chaves no nó
+};
+```
+
+## LÓGICA DE INSERÇÃO
+1. Se a árvore estiver vazia, criar raiz e inserir o primeiro elemento
+2. Se o nó atual tem espaço:
+   - Inserir ordenadamente no array de chaves
+   - Ajustar o array de dados correspondente
+   - Incrementar o contador
+3. Se o nó está cheio:
+   - Encontrar filho apropriado baseado na chave
+   - Chamar inserção recursivamente nesse filho
+
+## PSEUDOCÓDIGO DETALHADO
+
+### Alocar Novo Nó
+```
+função aloca_no():
+    novo = alocar memória para estrutura arv_multi
+    se falha na alocação:
+        retorna NULL
+    
+    para i de 0 até T-1:
+        novo->filhos[i] = NULL
+    
+    novo->contador = 0
+    retorna novo
+```
+
+### Inserção
+```
+função inserir(raiz, chave, dado):
+    // Caso 1: Árvore vazia
+    se raiz == NULL:
+        raiz = aloca_no()
+        raiz->chave[0] = chave
+        raiz->dado[0] = dado
+        raiz->contador = 1
+        retorna raiz
+    
+    // Caso 2: Nó tem espaço disponível
+    se raiz->contador < T:
+        pos = 0
+        
+        // Encontrar posição correta (ordenada)
+        enquanto pos < raiz->contador E raiz->chave[pos] < chave:
+            pos++
+            
+        // Deslocar elementos para inserir na posição correta
+        para i de raiz->contador até pos+1 (decrescente):
+            raiz->chave[i] = raiz->chave[i-1]
+            raiz->dado[i] = raiz->dado[i-1]
+        
+        // Inserir na posição correta
+        raiz->chave[pos] = chave
+        raiz->dado[pos] = dado
+        raiz->contador++
+    
+    // Caso 3: Nó cheio, inserir no filho apropriado
+    senão:
+        // Encontrar filho apropriado
+        pos = 0
+        enquanto pos < raiz->contador E raiz->chave[pos] < chave:
+            pos++
+        
+        // Se filho não existe, criar novo
+        se raiz->filhos[pos] == NULL:
+            raiz->filhos[pos] = aloca_no()
+        
+        // Inserir recursivamente no filho
+        inserir(raiz->filhos[pos], chave, dado)
+    
+    retorna raiz
+```
+
+### Percurso Pré-Ordem
+```
+função pre_ordem(raiz):
+    se raiz == NULL:
+        retorna
+    
+    para i de 0 até raiz->contador-1:
+        imprime raiz->chave[i], raiz->dado[i]
+    
+    para i de 0 até raiz->contador:
+        pre_ordem(raiz->filhos[i])
+```
+
+### Percurso Em-Ordem
+```
+função em_ordem(raiz):
+    se raiz == NULL:
+        retorna
+    
+    para i de 0 até raiz->contador-1:
+        se raiz->filhos[i] != NULL:
+            em_ordem(raiz->filhos[i])
+        
+        imprime raiz->chave[i], raiz->dado[i]
+    
+    // Último filho (à direita)
+    se raiz->filhos[raiz->contador] != NULL:
+        em_ordem(raiz->filhos[raiz->contador])
+```
+
+### Percurso Pós-Ordem
+```
+função pos_ordem(raiz):
+    se raiz == NULL:
+        retorna
+    
+    para i de 0 até raiz->contador:
+        se raiz->filhos[i] != NULL:
+            pos_ordem(raiz->filhos[i])
+    
+    para i de 0 até raiz->contador-1:
+        imprime raiz->chave[i], raiz->dado[i]
+```
+
+### Remoção
+```
+função remove_valor(raiz, chave):
+    // Caso 1: Árvore vazia ou chave não encontrada
+    se raiz == NULL:
+        retorna NULL (nada a remover)
+    
+    // Busca pela chave no nó atual
+    indice = encontra_indice(raiz, chave)
+    
+    // Chave encontrada no nó atual
+    se indice != -1:
+        // Caso 1.1: Nó é folha
+        se eh_folha(raiz):
+            remove_de_folha(raiz, indice)
+            
+            // Se após remoção o nó ficou vazio
+            se raiz->contador == 0:
+                libera nó
+                retorna NULL
+        // Caso 1.2: Nó não é folha
+        senão:
+            // Encontra sucessor (menor valor na subárvore direita)
+            sucessor = encontra_sucessor(raiz, indice)
+            
+            // Substitui pela chave do sucessor
+            raiz->chave[indice] = sucessor->chave
+            raiz->dado[indice] = sucessor->dado
+            
+            // Remove o sucessor recursivamente
+            raiz->filhos[indice+1] = remove_chave(raiz->filhos[indice+1], sucessor->chave)
+    
+    // Chave não encontrada no nó atual, busca nos filhos
+    senão:
+        i = 0
+        enquanto i < raiz->contador E chave > raiz->chave[i]:
+            i++
+            
+        se raiz->filhos[i] != NULL:
+            raiz->filhos[i] = remove_chave(raiz->filhos[i], chave)
+    
+    retorna raiz
+```
+
+## ESTRATÉGIAS DE REMOÇÃO
+
+1. Remover de Nó Folha (sem filhos):
+   - Simplesmente remova o elemento e reorganize o array de chaves
+   - Se o nó ficar vazio, pode ser removido
+
+2. Remover de Nó Interno (com filhos):
+   - Substituir o valor a ser removido pelo seu sucessor (menor valor da subárvore direita)
+   - OU pelo seu predecessor (maior valor da subárvore esquerda)
+   - Depois remover o sucessor/predecessor (que estará em um nó mais simples)
+
+3. Casos Especiais:
+   - Fusão: Quando um nó fica com poucos elementos, pode ser necessário fundir com um irmão
+   - Redistribuição: Elementos podem ser redistribuídos entre nós irmãos para evitar underflow
+
+4. Considerações de Balanceamento:
+   - Manter a altura uniforme após remoções
+   - Garantir que os nós mantenham ocupação mínima (exceto a raiz)
+
+## PERGUNTAS IMPORTANTES ANTES DE IMPLEMENTAR
+
+1. Estrutura:
+   - Qual o valor adequado para T? (depende da aplicação)
+   - Como será realizada a alocação de memória?
+   - Os dados precisam ser ordenados dentro do nó?
+
+2. Inserção:
+   - Como determinar em qual filho inserir uma nova chave?
+   - É necessário reorganizar os nós após inserção?
+   - Como lidar com duplicatas? (rejeitar, substituir ou permitir)
+
+3. Remoção:
+   - Como manter a árvore balanceada após remoções?
+   - É necessário reorganizar irmãos após remoção?
+   - Como tratar nós quase vazios? (fusão de nós)
+
+4. Busca:
+   - Qual é a estratégia mais eficiente para buscar um elemento?
+   - Como aproveitar a ordenação para otimizar a busca?
+
+5. Desempenho:
+   - Quais são os casos de pior e melhor desempenho?
+   - Como manter a árvore balanceada para garantir complexidade logarítmica?
+
+## CASOS ESPECIAIS A CONSIDERAR
+
+1. Overflow: Quando um nó precisa armazenar mais elementos que o permitido
+   - Possíveis soluções: divisão de nós, elevação de elementos para o pai
+
+2. Underflow: Quando um nó fica com poucos elementos após remoção
+   - Possíveis soluções: redistribuição entre irmãos, fusão de nós
+
+3. Balanceamento: Como garantir que a árvore permaneça com altura uniforme
+   - Possíveis abordagens: regras de divisão/fusão, rotações
+
+//tarefas 
+
+implementação de hoje 
+    impressao
+        pre ordem 
+        ordem 
+        pos ordem 
+    total de nos 
+    total de folhas  
+    busca por valor 
+    verifica se o no eh folha 
+    altura da arvore
+    imprime arvore por nivel 
+    contabiliza nos por nivel
+    imprime rota ate o valor 
+    busca menor valor
+    busca maior valor 
+    remoçao do no ✓

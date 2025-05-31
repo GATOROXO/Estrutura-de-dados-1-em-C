@@ -1,0 +1,12 @@
+Alocaçao dinamica de memoria
+
+-> Encadeamento de nós
+    ->O nó deve conter o dado e um componente que permitir o Encadeamento(ponteiro)
+    abstraçao de nó:
+
+    ->Para armazenar um inteiro,nosso nó será, por exemplo: 
+Tipo_nó{
+    inteiro valor 
+    Tipo_nó *prox
+}
+->Devemos ter um ponteiro quie sempre aponta ?/ o inicio da estrutura

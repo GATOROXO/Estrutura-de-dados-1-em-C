@@ -1,0 +1,151 @@
+==============================================================================
+PSEUDOCÓDIGO PARA REMOÇÃO EM ÁRVORE COM MÚLTIPLOS FILHOS
+==============================================================================
+
+Entrada: 
+    raiz (nó da árvore)
+    chave (o valor a ser removido)
+
+Saída:
+    Árvore atualizada sem o nó com a chave removida
+
+------------------------------------------------------------------------------
+FUNÇÃO remove_no(no, chave):
+    Se no == NULL:
+        Retorne NULL    // Caso base: árvore vazia ou fim do ramo
+
+    // 1. Encontre a posição "i" onde a chave deve estar.
+    i = 0
+    Enquanto (i < no.cont) E (chave > no.chaves[i]):
+        i = i + 1
+
+    // 2. Se a chave está presente no nó atual:
+    Se (i < no.cont) E (chave == no.chaves[i]):
+        // Verifique se o nó é folha (ou seja, todos os ponteiros dos filhos são NULL)
+        flag = VERDADEIRO
+        Para j de 0 até no.cont:
+            Se no.filhos[j] != NULL:
+                flag = FALSO
+
+        Se flag É VERDADEIRO:
+            // Caso 1: Nó folha
+            Se (no.cont == 1):
+                Liberar no
+                Retorne NULL      // Nó removido, não há chaves restantes
+            Senão:
+                // Caso 2: Nó folha com múltiplas chaves
+                Para j de (i+1) até no.cont - 1:
+                    no.chaves[j - 1] = no.chaves[j]
+                    no.dados[j - 1]  = no.dados[j]
+                no.cont = no.cont - 1
+                Retorne no
+
+        Senão:
+            // Nó não é folha; precisa substituir a chave removida com um valor substituto
+            Se (no.filhos[i] != NULL):
+                // 3a. Usa o predecessor: maior valor na subárvore esquerda 
+                aux_vl = busca_maior(no.filhos[i])
+                aux_no = busca_no(no.filhos[i], aux_vl)
+                // Encontre a posição de aux_vl em aux_no
+                z = 0
+                Enquanto (aux_no.chaves[z] != aux_vl):
+                    z = z + 1
+                // Substitua a chave atual pelo predecessor
+                no.chaves[i] = aux_no.chaves[z]
+                no.dados[i]  = aux_no.dados[z]
+                // Remova recursivamente o predecessor no filho esquerdo
+                no.filhos[i] = remove_no(no.filhos[i], aux_vl)
+            Senão se (no.filhos[i+1] != NULL):
+                // 3b. Usa o sucessor: menor valor na subárvore direita
+                aux_vl = busca_menor(no.filhos[i+1])
+                aux_no = busca_no(no.filhos[i+1], aux_vl)
+                z = 0
+                Enquanto (aux_no.chaves[z] != aux_vl):
+                    z = z + 1
+                no.chaves[i] = aux_no.chaves[z]
+                no.dados[i]  = aux_no.dados[z]
+                no.filhos[i+1] = remove_no(no.filhos[i+1], aux_vl)
+            Senão:
+                // 3c. Se a chave removida não tem filhos diretos
+                // Tenta procurar um filho válido entre os irmãos:
+                // 3c.1 Procura à esquerda
+                j = i
+                Enquanto (j >= 0 E no.filhos[j] == NULL):
+                    j = j - 1
+                Se (j >= 0):
+                    aux_vl = busca_maior(no.filhos[j])
+                    // Desloque as chaves para a direita para abrir espaço
+                    Enquanto (i > j):
+                        no.chaves[i] = no.chaves[i-1]
+                        no.dados[i]  = no.dados[i-1]
+                        i = i - 1
+                    aux_no = busca_no(no.filhos[j], aux_vl)
+                    z = 0
+                    Enquanto (aux_no.chaves[z] != aux_vl):
+                        z = z + 1
+                    no.chaves[i] = aux_no.chaves[z]
+                    no.dados[i]  = aux_no.dados[z]
+                    no.filhos[j] = remove_no(no.filhos[j], aux_vl)
+                Senão:
+                    // 3c.2 Procura à direita
+                    j = i
+                    Enquanto (j <= no.cont E no.filhos[j] == NULL):
+                        j = j + 1
+                    aux_vl = busca_menor(no.filhos[j])
+                    Enquanto (i < j):
+                        no.chaves[i] = no.chaves[i+1]
+                        no.dados[i]  = no.dados[i+1]
+                        i = i + 1
+                    aux_no = busca_no(no.filhos[j], aux_vl)
+                    z = 0
+                    Enquanto (aux_no.chaves[z] != aux_vl):
+                        z = z + 1
+                    no.chaves[i] = aux_no.chaves[z]
+                    no.dados[i]  = aux_no.dados[z]
+                    no.filhos[j] = remove_no(no->filhos[j], aux_vl)
+    Senão:
+        // 4. Se a chave não está presente no nó atual, desça recursivamente no filho apropriado.
+        no.filhos[i] = remove_no(no.filhos[i], chave)
+    Retorne no
+
+==============================================================================
+BRAINSTORM E SOLUÇÕES PARA IMPLEMENTAÇÃO DA REMOÇÃO "NO PAPEL"
+==============================================================================
+
+1. Definir o problema:
+   - Entrada: Um nó da árvore e a chave a remover.
+   - Caso a chave esteja no nó:
+     a) Se o nó for folha: Remover e deslocar chaves.
+     b) Se for nó interno: Encontrar um substituto (predecessor ou sucessor) e remover esse substituto recursivamente.
+   - Caso a chave não esteja no nó: Descer para o filho correto, mantendo os nós ordenados.
+
+2. Passos para implementação "no papel":
+   a) Desenhar a árvore e identificar o nó onde a chave se encontra.
+   b) Identificar se o nó é folha ou interno.
+   c) Se for folha:
+         - Remover a chave e verificar se o nó ficará vazio (nesse caso, remover o nó).
+         - Se não for vazio, deslocar as chaves para preencher o espaço.
+   d) Se for nó interno:
+         - Procurar o predecessor (maior da subárvore esquerda) ou sucessor (menor da subárvore direita).
+         - Anotar a chave substituta.
+         - Substituir a chave removida pela substituta.
+         - Marcar a substituição para remoção recursiva na subárvore.
+   e) Rever os ponteiros para garantir que todos os filhos continuem corretos e a ordem seja mantida.
+
+3. Ideias adicionais:
+   - Dividir a função remove_no em subfunções para cada caso (folha, nó interno com predecessor, nó interno com sucessor, e caso de irmãos).
+   - Verificar exemplares em papel com pequenas árvores (entrada e saída), desenhando cada etapa.
+   - Utilizar diagramas para visualizar os deslocamentos de chaves e a promoção do predecessor/sucessor.
+
+4. Notas Importantes:
+   - A função usa laços para "deslocar" os valores do vetor de chaves, garantindo que não haja lacunas.
+   - A recursão é essencial para descer aos níveis da árvore onde a chave substituta é removida.
+   - As funções auxiliares (busca_maior, busca_menor, busca_no) ajudam a manter o código modular e facilitar a compreensão.
+
+==============================================================================
+Resumo Final:
+O pseudocódigo acima descreve detalhadamente os passos para remover uma chave de uma árvore com múltiplos filhos. Ele aborda tanto a remoção em nós folha quanto a interna, explicando como buscar um valor substituto e ajustar os vetores de chaves e dados. O brainstorm inclui ideias para dividir a funcionalidade e testar cada parte "no papel", facilitando assim a implementação prática e a compreensão do algoritmo.
+
+==============================================================================
+
+Esta formatação e detalhamento devem ajudar a tornar a leitura e estudo do algoritmo menos cansativo e mais claro.
